@@ -39,6 +39,8 @@
 
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,300italic'>
 
+    <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
+
     @yield('style')
     <script src="{{ asset('theme/global/vendor/breakpoints/breakpoints.js') }}"></script>
     <script>
@@ -111,17 +113,6 @@
 <script src="{{ asset('theme/global/js/Plugin/jvectormap.js') }}"></script>
 
 <script src="{{ asset('theme/global/js/Plugin/material.js') }}"></script>
-
-<script>
-    (function (document, window, $) {
-        'use strict';
-
-        var Site = window.Site;
-        $(document).ready(function () {
-            Site.run();
-        });
-    })(document, window, jQuery);
-</script>
 @yield('script')
 
 </html>

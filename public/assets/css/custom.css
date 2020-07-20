@@ -1,0 +1,12 @@
+body {
+    background-color: #f1f4f5 !important;
+}
+
+input {
+    color: #0b0b0b !important;
+}
+
+.fail-validate {
+    font-size: .875rem;
+    color: #ff4c52;
+}
