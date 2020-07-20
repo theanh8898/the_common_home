@@ -13,7 +13,7 @@
     <div class="page vertical-align text-center" data-animsition-in="fade-in" data-animsition-out="fade-out">>
         <div class="page-content vertical-align-middle animation-slide-top animation-duration-1 mt-p10">
             <div class="brand">
-                <img class="brand-img" src="../../assets//images/logo.png" alt="...">
+                <img class="brand-img" src="{{ asset('assets/media/logo.png') }}" alt="...">
                 <h2 class="brand-text">The Common Home</h2>
             </div>
             <p>Sign into your pages account</p>

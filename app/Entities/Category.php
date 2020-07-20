@@ -15,6 +15,8 @@ class Category extends Model implements Transformable
 {
     use TransformableTrait;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -24,7 +26,8 @@ class Category extends Model implements Transformable
         'id',
         'name',
         'title',
-        'meta_description'
+        'meta_description',
+        'created_at'
     ];
 
 }

@@ -48,8 +48,8 @@
                         </a>
                         <ul class="site-menu-sub" style="">
                             <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/menu-collapsed.html">
-                                    <span class="site-menu-title">Menu Collapsed</span>
+                                <a class="animsition-link" href="{{ route(CREATE_CATEGORY) }}">
+                                    <span class="site-menu-title">Create Categories</span>
                                 </a>
                             </li>
                             <li class="site-menu-item">
@@ -57,56 +57,7 @@
                                     <span class="site-menu-title">Menu Collapsed Alt</span>
                                 </a>
                             </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/menu-expended.html">
-                                    <span class="site-menu-title">Menu Expended</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/grids.html">
-                                    <span class="site-menu-title">Grid Scaffolding</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/layout-grid.html">
-                                    <span class="site-menu-title">Layout Grid</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/headers.html">
-                                    <span class="site-menu-title">Different Headers</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/panel-transition.html">
-                                    <span class="site-menu-title">Panel Transition</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/boxed.html">
-                                    <span class="site-menu-title">Boxed Layout</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/two-columns.html">
-                                    <span class="site-menu-title">Two Columns</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/menubar-flipped.html">
-                                    <span class="site-menu-title">Menubar Flipped</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/menubar-native-scrolling.html">
-                                    <span class="site-menu-title">Menubar Native Scrolling</span>
-                                </a>
-                            </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/bordered-header.html">
-                                    <span class="site-menu-title">Bordered Header</span>
-                                </a>
-                            </li>
+
                             <li class="site-menu-item has-sub">
                                 <a href="javascript:void(0)">
                                     <span class="site-menu-title">Page Aside</span>

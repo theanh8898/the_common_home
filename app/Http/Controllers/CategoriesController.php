@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Entities\Category;
+use App\Services\CategoryService;
 
-use App\Http\Requests;
+use Illuminate\Http\Response;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\CategoryCreateRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Repositories\CategoryRepository;
-use App\Validators\CategoryValidator;
 
 /**
  * Class CategoriesController.
@@ -24,41 +24,35 @@ class CategoriesController extends Controller
      */
     protected $repository;
 
-    /**
-     * @var CategoryValidator
-     */
-    protected $validator;
+    protected $categoryService;
 
     /**
      * CategoriesController constructor.
      *
      * @param CategoryRepository $repository
-     * @param CategoryValidator $validator
+     * @param CategoryService $categoryService
      */
-    public function __construct(CategoryRepository $repository, CategoryValidator $validator)
+    public function __construct(CategoryRepository $repository, CategoryService $categoryService)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
+        $this->categoryService = $categoryService;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         $categories = $this->repository->all();
 
-        if (request()->wantsJson()) {
+        return view('categories.list', compact('categories'));
+    }
 
-            return response()->json([
-                'data' => $categories,
-            ]);
-        }
-
-        return view('categories.index', compact('categories'));
+    public function create()
+    {
+        return view('categories.create');
     }
 
     /**
@@ -66,39 +60,18 @@ class CategoriesController extends Controller
      *
      * @param  CategoryCreateRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      *
-     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function store(CategoryCreateRequest $request)
     {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $category = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Category created.',
-                'data'    => $category->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+        $category = $this->categoryService->create($request->all());
+        if ($category === null) {
+            return 'error';
         }
+
+        return ($category->id);
+
     }
 
     /**
@@ -106,7 +79,7 @@ class CategoriesController extends Controller
      *
      * @param  int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show($id)
     {
@@ -127,11 +100,11 @@ class CategoriesController extends Controller
      *
      * @param  int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function edit($id)
     {
-        $category = $this->repository->find($id);
+        $category = Category::where('id', $id)->get()->first();
 
         return view('categories.edit', compact('category'));
     }
@@ -148,35 +121,7 @@ class CategoriesController extends Controller
      */
     public function update(CategoryUpdateRequest $request, $id)
     {
-        try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $category = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'Category updated.',
-                'data'    => $category->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
-        }
+        return $category = $this->categoryService->update($request->all());
     }
 
 
@@ -185,7 +130,7 @@ class CategoriesController extends Controller
      *
      * @param  int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function destroy($id)
     {
