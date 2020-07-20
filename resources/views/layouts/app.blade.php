@@ -113,6 +113,16 @@
 <script src="{{ asset('theme/global/js/Plugin/jvectormap.js') }}"></script>
 
 <script src="{{ asset('theme/global/js/Plugin/material.js') }}"></script>
+
+<script>
+    (function (document, window, $) {
+        'use strict';
+        var Site = window.Site;
+        $(document).ready(function () {
+            Site.run();
+        });
+    })(document, window, jQuery);
+</script>
 @yield('script')
 
 </html>
