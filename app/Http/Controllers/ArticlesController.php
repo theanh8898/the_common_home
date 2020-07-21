@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\ArticleCreateRequest;
 use App\Http\Requests\ArticleUpdateRequest;
 use App\Repositories\ArticleRepository;
-use App\Validators\ArticleValidator;
+use App\Repositories\CategoryRepository;
+use App\Repositories\EntityMediaRepository;
+use App\Repositories\MediaRepository;
+use Illuminate\Support\Facades\Storage;
+use Prettus\Validator\Contracts\ValidatorInterface;
+use Prettus\Validator\Exceptions\ValidatorException;
 
 /**
  * Class ArticlesController.
@@ -25,20 +25,39 @@ class ArticlesController extends Controller
     protected $repository;
 
     /**
-     * @var ArticleValidator
+     * @var CategoryRepository
      */
-    protected $validator;
+    protected $categoryRepository;
+
+    /**
+     * @var MediaRepository
+     */
+    protected $mediaRepository;
+
+    /**
+     * @var EntityMediaRepository
+     */
+    protected $entityMediaRepository;
 
     /**
      * ArticlesController constructor.
      *
      * @param ArticleRepository $repository
-     * @param ArticleValidator $validator
+     * @param CategoryRepository $categoryRepository
+     * @param MediaRepository $mediaRepository
+     * @param EntityMediaRepository $entityMediaRepository
      */
-    public function __construct(ArticleRepository $repository, ArticleValidator $validator)
+    public function __construct(
+        ArticleRepository $repository,
+        CategoryRepository $categoryRepository,
+        MediaRepository $mediaRepository,
+        EntityMediaRepository $entityMediaRepository
+    )
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
+        $this->categoryRepository = $categoryRepository;
+        $this->mediaRepository = $mediaRepository;
+        $this->entityMediaRepository = $entityMediaRepository;
     }
 
     /**
@@ -48,7 +67,6 @@ class ArticlesController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         $articles = $this->repository->all();
 
         if (request()->wantsJson()) {
@@ -64,47 +82,36 @@ class ArticlesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  ArticleCreateRequest $request
+     * @param ArticleCreateRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function store(ArticleCreateRequest $request)
     {
         try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
+            $request['created_at'] = time();
+            $request['updated_at'] = time();
             $article = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Article created.',
-                'data'    => $article->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $files = $request->file('files');
+            $medias = json_decode($request->get('medias'));
+            $this->repository->createMedias($files,$medias, $article->id);
+            return response()->json([
+                'error' => false
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ]);
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -125,7 +132,7 @@ class ArticlesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -139,8 +146,8 @@ class ArticlesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  ArticleUpdateRequest $request
-     * @param  string            $id
+     * @param ArticleUpdateRequest $request
+     * @param string $id
      *
      * @return Response
      *
@@ -156,7 +163,7 @@ class ArticlesController extends Controller
 
             $response = [
                 'message' => 'Article updated.',
-                'data'    => $article->toArray(),
+                'data' => $article->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -170,7 +177,7 @@ class ArticlesController extends Controller
             if ($request->wantsJson()) {
 
                 return response()->json([
-                    'error'   => true,
+                    'error' => true,
                     'message' => $e->getMessageBag()
                 ]);
             }
@@ -183,7 +190,7 @@ class ArticlesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -200,5 +207,10 @@ class ArticlesController extends Controller
         }
 
         return redirect()->back()->with('message', 'Article deleted.');
+    }
+
+    public function create()
+    {
+        return view('articles.create');
     }
 }

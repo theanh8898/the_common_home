@@ -13,7 +13,6 @@
                 <h4 class="example-title">Title</h4>
                 <input type="text" v-model="titleCategory" class="form-control" v-bind:class="[{'is-invalid' : (this.errors.title &&this.errors.title.length > 0)}]" placeholder="Name">
                 <small class="fail-validate" v-if="errors.title && errors.title.length > 0">{{ errors.title[0] }}</small>
-
             </div>
         </div>
 
@@ -22,7 +21,6 @@
                 <h4 class="example-title">Meta Description</h4>
                 <input type="text" v-model="metaDescriptionCategory" class="form-control" v-bind:class="[{'is-invalid' : (this.errors.meta_description &&this.errors.meta_description.length > 0)}]" id="name-category" placeholder="Name">
                 <small class="fail-validate" v-if="errors.meta_description && errors.meta_description.length > 0">{{ errors.meta_description[0] }}</small>
-
             </div>
         </div>
 

@@ -7,15 +7,13 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
- * Class Article.
+ * Class Media.
  *
  * @package namespace App\Entities;
  */
-class Article extends Model implements Transformable
+class Media extends Model implements Transformable
 {
     use TransformableTrait;
-
-    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -24,14 +22,13 @@ class Article extends Model implements Transformable
      */
     protected $fillable = [
         'id',
-        'type',
+        'media_type',
         'name',
-        'title',
-        'meta_description',
-        'content',
-        'category_id',
-        'created_at',
-        'updated_at'
+        'use_type',
+        'sort_order',
+        'created_at'
     ];
+
+    public $timestamps = false;
 
 }

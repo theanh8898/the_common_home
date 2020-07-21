@@ -30,4 +30,6 @@ Route::middleware(['auth'])->group(function () {
         Route::put('update/{id}', 'CategoriesController@update')->name(UPDATE_CATEGORY);
     });
 
+    Route::resource('articles', 'ArticlesController');
+
 });
