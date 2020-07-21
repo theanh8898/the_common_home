@@ -3,7 +3,7 @@
 @section('content')
     <div class="page">
         <div class="page-header">
-            <h1 class="page-title">Create a new Category</h1>
+            <h1 class="page-title">Edit a Category</h1>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route(HOME) }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route(LIST_CATEGORY) }}">Categories</a></li>

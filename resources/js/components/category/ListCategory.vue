@@ -39,21 +39,36 @@
                       align="right"
         ></b-pagination>
 
+        <modal id="modal-confirm-import" ref="modalConfirmDelete">-->
+            <span slot="modal-title" class="font-weight-bold">Do you want delete this category??</span>
+
+            <div slot="modal-body">
+            </div>
+            <div slot="modal-footer">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" @click="deleteUser(idDel)">OK</button>
+                </div>
+            </div>
+        </modal>
     </div>
 </template>
 
 <script>
     import { BTable,BPagination } from 'bootstrap-vue';
+    import modal from '../common/modal';
 
     export default {
         name: "ListCategory",
         components: {
             BTable,
-            BPagination
+            BPagination,
+            modal
         },
         props: ['categoriesData'],
         data() {
             return {
+                idDel: '',
                 perPage: 10,
                 currentPage: 1,
                 fields: [
@@ -108,7 +123,18 @@
                 window.location.href = `/categories/edit/${id}`;
             },
             showConfirmDelete(id) {
+                this.idDel = id;
+                this.$refs.modalConfirmDelete.open();
+            },
+            deleteUser(id) {
+                this.$refs.modalConfirmDelete.close();
 
+                axios.delete(`/categories/delete/${id}`)
+                    .then((data) => {
+                        location.href = '/categories';
+                    }).catch((error) => {
+                    console.log(error);
+                });
             }
         },
         computed: {

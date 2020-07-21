@@ -40,54 +40,22 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="site-menu-item has-sub">
-                        <a href="javascript:void(0)">
+                    <li class="site-menu-item has-sub  {{ Request::is('categories') || Request::is('categories/*') ? 'active open' : '' }}">
+                        <a href="javascript:void(0)" >
                             <i class="site-menu-icon wb-layout" aria-hidden="true"></i>
                             <span class="site-menu-title">Manage Categories</span>
                             <span class="site-menu-arrow"></span>
                         </a>
                         <ul class="site-menu-sub" style="">
-                            <li class="site-menu-item">
+                            <li class="site-menu-item {{ Request::is('categories/create') ? 'active' : '' }}">
                                 <a class="animsition-link" href="{{ route(CREATE_CATEGORY) }}">
                                     <span class="site-menu-title">Create Categories</span>
                                 </a>
                             </li>
-                            <li class="site-menu-item">
-                                <a class="animsition-link" href="layouts/menu-collapsed-alt.html">
-                                    <span class="site-menu-title">Menu Collapsed Alt</span>
+                            <li class="site-menu-item {{ Request::is('categories') ? 'active' : '' }}">
+                                <a class="animsition-link" href="{{ route(LIST_CATEGORY) }}">
+                                    <span class="site-menu-title">Category List</span>
                                 </a>
-                            </li>
-
-                            <li class="site-menu-item has-sub">
-                                <a href="javascript:void(0)">
-                                    <span class="site-menu-title">Page Aside</span>
-                                    <div class="site-menu-label">
-                                        <span class="badge badge-danger badge-round mr-25">new</span>
-                                    </div>
-                                    <span class="site-menu-arrow"></span>
-                                </a>
-                                <ul class="site-menu-sub">
-                                    <li class="site-menu-item">
-                                        <a class="animsition-link" href="layouts/aside-left-static.html">
-                                            <span class="site-menu-title">Left Static</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animsition-link" href="layouts/aside-right-static.html">
-                                            <span class="site-menu-title">Right Static</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animsition-link" href="layouts/aside-left-fixed.html">
-                                            <span class="site-menu-title">Left Fixed</span>
-                                        </a>
-                                    </li>
-                                    <li class="site-menu-item">
-                                        <a class="animsition-link" href="layouts/aside-right-fixed.html">
-                                            <span class="site-menu-title">Right Fixed</span>
-                                        </a>
-                                    </li>
-                                </ul>
                             </li>
                         </ul>
                     </li>

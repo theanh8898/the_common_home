@@ -10,3 +10,7 @@ input {
     font-size: .875rem;
     color: #ff4c52;
 }
+
+.text-decoration-none:hover{
+    text-decoration: none;
+}

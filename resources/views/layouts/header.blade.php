@@ -1,9 +1,11 @@
 <nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
 
     <div class="navbar-header">
-        <div class="navbar-brand navbar-brand-center site-gridmenu-toggle active" data-toggle="gridmenu" aria-expanded="true">
-            <img class="navbar-brand-logo" src="{{ asset('assets/media/logo.png') }}">
-            <span class="navbar-brand-text hidden-xs-down"> The common Home</span>
+        <div class="navbar-brand navbar-brand-center active" data-toggle="gridmenu" aria-expanded="true">
+            <a class="text-white text-decoration-none" href="{{ route(HOME) }}">
+                <img class="navbar-brand-logo" src="{{ asset('assets/media/logo.png') }}">
+                <span class="navbar-brand-text hidden-xs-down"> The common Home</span>
+            </a>
         </div>
     </div>
 
