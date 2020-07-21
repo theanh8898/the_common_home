@@ -11,5 +11,11 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface ArticleRepository extends RepositoryInterface
 {
-    //
+    /**
+     * @param $files
+     * @param $medias
+     * @param $articleId
+     * @return mixed
+     */
+    public function createMedias($files, $medias, $articleId);
 }

@@ -33,4 +33,6 @@ Route::middleware(['auth'])->group(function () {
 //        Route::post('check-password', 'UserController@checkPass')->name(CHECK_PASSWORD);
     });
 
+    Route::resource('articles', 'ArticlesController');
+
 });

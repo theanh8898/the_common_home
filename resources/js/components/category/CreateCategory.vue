@@ -3,16 +3,16 @@
         <div class="col-md-6 col-lg-4">
             <div class="example-wrap">
                 <h4 class="example-title">Name</h4>
-                <input type="text" v-model="nameCategory" class="form-control" v-bind:class="[{'is-invalid' : (this.errors.name.length > 0)}]" placeholder="Name">
-                <small class="fail-validate">{{ errors.name[0] }}</small>
+                <input type="text" v-model="nameCategory" class="form-control" v-bind:class="[{'is-invalid' : (errors.name.length > 0)}]" placeholder="Name">
+                <small class="fail-validate" v-if="errors.name.length > 0">{{ errors.name[0] }}</small>
             </div>
         </div>
 
         <div class="col-md-6 col-lg-4">
             <div class="example-wrap">
                 <h4 class="example-title">Title</h4>
-                <input type="text" v-model="titleCategory" class="form-control" v-bind:class="[{'is-invalid' : (this.errors.title.length > 0)}]" placeholder="Name">
-                <small class="fail-validate">{{ errors.title[0] }}</small>
+                <input type="text" v-model="titleCategory" class="form-control" v-bind:class="[{'is-invalid' : (errors.title.length > 0)}]" placeholder="Name">
+                <small class="fail-validate" v-if="errors.title.length > 0">{{ errors.title[0] }}</small>
 
             </div>
         </div>
@@ -20,8 +20,8 @@
         <div class="col-md-12 col-lg-8">
             <div class="example-wrap">
                 <h4 class="example-title">Meta Description</h4>
-                <input type="text" v-model="metaDescriptionCategory" class="form-control" v-bind:class="[{'is-invalid' : (this.errors.meta_description.length > 0)}]" id="name-category" placeholder="Name">
-                <small class="fail-validate">{{ errors.meta_description[0] }}</small>
+                <input type="text" v-model="metaDescriptionCategory" class="form-control" v-bind:class="[{'is-invalid' : (errors.meta_description.length > 0)}]" id="name-category" placeholder="Name">
+                <small class="fail-validate" v-if="errors.meta_description.length > 0">{{ errors.meta_description[0] }}</small>
 
             </div>
         </div>

@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Entities\Category;
-use App\Services\CategoryService;
-
-use Illuminate\Http\Response;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\CategoryCreateRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Repositories\CategoryRepository;
+use App\Services\CategoryService;
+use Illuminate\Http\Response;
 
 /**
  * Class CategoriesController.
@@ -46,6 +43,11 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = $this->repository->all();
+        if (request()->wantsJson()) {
+            return response()->json([
+                'data' => $categories
+            ]);
+        }
 
         return view('categories.list', compact('categories'));
     }
@@ -58,7 +60,7 @@ class CategoriesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  CategoryCreateRequest $request
+     * @param CategoryCreateRequest $request
      *
      * @return Response
      *
@@ -77,7 +79,7 @@ class CategoriesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -98,7 +100,7 @@ class CategoriesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
@@ -112,8 +114,8 @@ class CategoriesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  CategoryUpdateRequest $request
-     * @param  string            $id
+     * @param CategoryUpdateRequest $request
+     * @param string $id
      *
      * @return Response
      *
@@ -128,7 +130,7 @@ class CategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return Response
      */
