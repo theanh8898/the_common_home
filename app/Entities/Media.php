@@ -20,6 +20,15 @@ class Media extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'id',
+        'media_type',
+        'name',
+        'use_type',
+        'sort_order',
+        'created_at'
+    ];
+
+    public $timestamps = false;
 
 }

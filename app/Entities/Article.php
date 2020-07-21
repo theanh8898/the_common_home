@@ -15,6 +15,8 @@ class Article extends Model implements Transformable
 {
     use TransformableTrait;
 
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -27,7 +29,9 @@ class Article extends Model implements Transformable
         'title',
         'meta_description',
         'content',
-        'category_id'
+        'category_id',
+        'created_at',
+        'updated_at'
     ];
 
 }

@@ -6,6 +6,9 @@ use App\Http\Requests\ArticleCreateRequest;
 use App\Http\Requests\ArticleUpdateRequest;
 use App\Repositories\ArticleRepository;
 use App\Repositories\CategoryRepository;
+use App\Repositories\EntityMediaRepository;
+use App\Repositories\MediaRepository;
+use Illuminate\Support\Facades\Storage;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -27,15 +30,34 @@ class ArticlesController extends Controller
     protected $categoryRepository;
 
     /**
+     * @var MediaRepository
+     */
+    protected $mediaRepository;
+
+    /**
+     * @var EntityMediaRepository
+     */
+    protected $entityMediaRepository;
+
+    /**
      * ArticlesController constructor.
      *
      * @param ArticleRepository $repository
      * @param CategoryRepository $categoryRepository
+     * @param MediaRepository $mediaRepository
+     * @param EntityMediaRepository $entityMediaRepository
      */
-    public function __construct(ArticleRepository $repository, CategoryRepository $categoryRepository)
+    public function __construct(
+        ArticleRepository $repository,
+        CategoryRepository $categoryRepository,
+        MediaRepository $mediaRepository,
+        EntityMediaRepository $entityMediaRepository
+    )
     {
         $this->repository = $repository;
         $this->categoryRepository = $categoryRepository;
+        $this->mediaRepository = $mediaRepository;
+        $this->entityMediaRepository = $entityMediaRepository;
     }
 
     /**
@@ -69,7 +91,15 @@ class ArticlesController extends Controller
     public function store(ArticleCreateRequest $request)
     {
         try {
-            dd($request->all());
+            $request['created_at'] = time();
+            $request['updated_at'] = time();
+            $article = $this->repository->create($request->all());
+            $files = $request->file('files');
+            $medias = json_decode($request->get('medias'));
+            $this->repository->createMedias($files,$medias, $article->id);
+            return response()->json([
+                'error' => false
+            ]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,

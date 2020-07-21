@@ -20,6 +20,12 @@ class EntityMedia extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'entity_type',
+        'entity_id',
+        'media_id'
+    ];
+
+    public $timestamps = false;
 
 }

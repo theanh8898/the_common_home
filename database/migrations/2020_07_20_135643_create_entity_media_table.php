@@ -18,7 +18,7 @@ class CreateEntityMediaTable extends Migration
 		Schema::create('entity_media', function(Blueprint $table) {
             $table->tinyInteger('entity_type');
             $table->integer('entity_id');
-            $table->integer('media_type');
+            $table->integer('media_id');
 		});
 	}
 
