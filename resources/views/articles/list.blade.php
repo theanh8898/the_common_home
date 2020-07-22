@@ -3,21 +3,24 @@
 @section('content')
     <div class="page">
         <div class="page-header">
-            <h1 class="page-title">Create a new Article</h1>
+            <a class="text-white btn btn-info btn-show float-right" style="text-decoration: none" href="{{route(CREATE_ARTICLE)}}">
+                <i class="fa fa-plus-square"></i>
+            </a>
+            <h1 class="page-title">Articles</h1>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route(HOME) }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route(LIST_ARTICLE) }}">Articles</a></li>
-                <li class="breadcrumb-item active">Create Article</li>
+                <li class="breadcrumb-item">Articles</li>
             </ol>
         </div>
         <div class="page-content">
             <div class="panel">
                 <div class="panel-body container-fluid">
-                    <create-article />
+                    <list-article :articles-data="{{ json_encode($articles) }}"/>
                 </div>
             </div>
 
 
         </div>
     </div>
+
 @endsection

@@ -10,7 +10,12 @@ const LIST_CATEGORY = 'listCategory';
 const EDIT_CATEGORY = 'editCategory';
 const UPDATE_CATEGORY = 'updateCategory';
 const DELETE_CATEGORY = 'deleteCategory';
-
+const DETAIL_CATEGORY = 'detailCategory';
+const LIST_ARTICLE = 'listArticle';
+const CREATE_ARTICLE = 'createArticle';
+const STORE_ARTICLE = 'storeArticle';
+const DETAIL_ARTICLE = 'detailArticle';
+const DELETE_ARTICLE = 'deleteArticle';
 /**
  * Type of article
  */

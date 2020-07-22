@@ -8,6 +8,7 @@ use App\Repositories\ArticleRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\EntityMediaRepository;
 use App\Repositories\MediaRepository;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -63,11 +64,16 @@ class ArticlesController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $articles = $this->repository->all();
+        if ($request->category_id !== null) {
+            $articles = $this->repository->with('medias')->findWhere(['category_id' => $request->category_id]);
+        } else {
+            $articles = $this->repository->with('medias')->all();
+        }
 
         if (request()->wantsJson()) {
 
@@ -76,7 +82,7 @@ class ArticlesController extends Controller
             ]);
         }
 
-        return view('articles.index', compact('articles'));
+        return view('articles.list', compact('articles'));
     }
 
     /**
@@ -117,7 +123,7 @@ class ArticlesController extends Controller
      */
     public function show($id)
     {
-        $article = $this->repository->find($id);
+        $article = $this->repository->with('medias')->find($id);
 
         if (request()->wantsJson()) {
 

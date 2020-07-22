@@ -93,7 +93,7 @@
                     <div class="col-10" v-if="media.media_type!==''">
                         <div class="example-wrap">
                             <h4 class="example-title">File</h4>
-                            <input type="file" @change="addFile($event,index)">
+                            <input type="file" @change="addFile($event,index)" accept=".png, .jpg, .jpeg, .mp4">
                         </div>
                     </div>
                     <div class="col-10" v-if="media.media_type==='image' && media.file!==''"
@@ -187,7 +187,7 @@
                     }
                 );
                 axios.post(
-                    '/articles',
+                    '/articles/store',
                     formData,
                     {
                         headers: {
@@ -196,7 +196,7 @@
                     }
                 ).then(response => {
                     console.log(response.data);
-                    // window.location.href = '/articles';
+                    window.location.href = '/articles';
                 }).catch((error) => {
                     console.log(error.response.data);
                     this.errors = error.response.data.errors;

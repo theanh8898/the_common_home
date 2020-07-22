@@ -34,7 +34,6 @@ class ArticleRepositoryEloquent extends BaseRepository implements ArticleReposit
      */
     public function createMedias($files, $medias, $articleId)
     {
-        $data = [];
         if (count($files) > 0) {
             $mediasCreated = [];
             foreach ($medias as $index => $item) {
@@ -52,9 +51,11 @@ class ArticleRepositoryEloquent extends BaseRepository implements ArticleReposit
                 $media['use_type'] = array_search($item->use_type, USE_TYPE_OF_MEDIA);
                 $media['sort_order'] = $item->sort_order;
                 $media['created_at'] = time();
-                $media = Media::create($media);
-                array_push($mediasCreated, $media->id);
+
+                $mediaCreated = Media::create($media);
+                array_push($mediasCreated, $mediaCreated->id);
             }
+
             $entityMedias = [];
             foreach ($mediasCreated as $item) {
                 $entity['entity_type'] = array_search('article', TYPES_OF_ENTITY_MEDIA);

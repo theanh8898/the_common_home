@@ -4,7 +4,7 @@
         <div class="navbar-brand navbar-brand-center active" data-toggle="gridmenu" aria-expanded="true">
             <a class="text-white text-decoration-none" href="{{ route(HOME) }}">
                 <img class="navbar-brand-logo" src="{{ asset('assets/media/logo.png') }}">
-                <span class="navbar-brand-text hidden-xs-down"> The common Home</span>
+                <span class="navbar-brand-text hidden-xs-down"> The Common Home</span>
             </a>
         </div>
     </div>
@@ -27,23 +27,23 @@
 
             <!-- Navbar Toolbar Right -->
             <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
-                <li class="nav-item dropdown">
-                    <a class="nav-link" data-toggle="dropdown" href="javascript:void(0)" data-animation="scale-up" aria-expanded="false" role="button">
-                        <span class="flag-icon flag-icon-us"></span>
-                    </a>
-                    <div class="dropdown-menu" role="menu">
-                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">
-                            <span class="flag-icon flag-icon-gb"></span> English</a>
-                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">
-                            <span class="flag-icon flag-icon-fr"></span> French</a>
-                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">
-                            <span class="flag-icon flag-icon-cn"></span> Chinese</a>
-                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">
-                            <span class="flag-icon flag-icon-de"></span> German</a>
-                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">
-                            <span class="flag-icon flag-icon-nl"></span> Dutch</a>
-                    </div>
-                </li>
+{{--                <li class="nav-item dropdown">--}}
+{{--                    <a class="nav-link" data-toggle="dropdown" href="javascript:void(0)" data-animation="scale-up" aria-expanded="false" role="button">--}}
+{{--                        <span class="flag-icon flag-icon-us"></span>--}}
+{{--                    </a>--}}
+{{--                    <div class="dropdown-menu" role="menu">--}}
+{{--                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">--}}
+{{--                            <span class="flag-icon flag-icon-gb"></span> English</a>--}}
+{{--                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">--}}
+{{--                            <span class="flag-icon flag-icon-fr"></span> French</a>--}}
+{{--                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">--}}
+{{--                            <span class="flag-icon flag-icon-cn"></span> Chinese</a>--}}
+{{--                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">--}}
+{{--                            <span class="flag-icon flag-icon-de"></span> German</a>--}}
+{{--                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">--}}
+{{--                            <span class="flag-icon flag-icon-nl"></span> Dutch</a>--}}
+{{--                    </div>--}}
+{{--                </li>--}}
                 <li class="nav-item dropdown">
                     <a class="nav-link navbar-avatar" data-toggle="dropdown" href="#" aria-expanded="false" data-animation="scale-up" role="button">
                 <span class="avatar avatar-online">
