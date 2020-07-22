@@ -35,3 +35,9 @@ const USE_TYPE_OF_MEDIA = ['avatar', 'cover'];
  * Type of entity media
  */
 const TYPES_OF_ENTITY_MEDIA = ['article', 'home', 'room'];
+
+/**
+ * Define params get list
+ */
+const PAGE_SIZE = 10;
+

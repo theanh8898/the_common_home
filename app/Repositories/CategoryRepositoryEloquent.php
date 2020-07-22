@@ -25,8 +25,6 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
         return Category::class;
     }
 
-    
-
     /**
      * Boot up the repository, pushing criteria
      */
@@ -34,5 +32,17 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
+    public function getListCategories($params)
+    {
+        $pageSize = $params['page_size'] ?? PAGE_SIZE;
+        $keyword = $params['keyword'];
+        $categories = $this->orderBy('name');
+        if ($keyword !== null) {
+            $categories->scopeQuery(function ($query) use ($keyword) {
+                return $query->where('name', 'like', '%' . $keyword . '%');
+            });
+        }
+        return $categories->paginate($pageSize);
+    }
 }

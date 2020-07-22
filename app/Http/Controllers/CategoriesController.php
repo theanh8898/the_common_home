@@ -7,7 +7,11 @@ use App\Http\Requests\CategoryCreateRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Repositories\CategoryRepository;
 use App\Services\CategoryService;
+use Dotenv\Exception\ValidationException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class CategoriesController.
@@ -38,23 +42,26 @@ class CategoriesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = $this->repository->all();
-        if (request()->wantsJson()) {
+
+        try {
+            $categories = $this->repository->getListCategories($request->all());
             return response()->json([
-                'data' => $categories
-            ]);
+                'categories' => $categories,
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message' => ''
+            ], 200);
+        } catch (\Exception $e) {
+            response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        return view('categories.list', compact('categories'));
-    }
-
-    public function create()
-    {
-        return view('categories.create');
     }
 
     /**
@@ -62,18 +69,28 @@ class CategoriesController extends Controller
      *
      * @param CategoryCreateRequest $request
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      *
      */
     public function store(CategoryCreateRequest $request)
     {
-        $category = $this->categoryService->create($request->all());
-        if ($category === null) {
-            return 'error';
+        DB::beginTransaction();
+        try {
+            $category = $this->categoryService->create($request->all());
+            DB::commit();
+            return response()->json([
+                'data' => ['id' => $category->id],
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message' => trans('messages.category.create.success')
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        return ($category->id);
-
     }
 
     /**
@@ -81,20 +98,26 @@ class CategoriesController extends Controller
      *
      * @param int $id
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        $category = $this->repository->find($id);
-
-        if (request()->wantsJson()) {
-
+        DB::beginTransaction();
+        try {
+            $category = $this->repository->find($id);
+            DB::commit();
             return response()->json([
                 'data' => $category,
-            ]);
+                'error' => false,
+                'code' => 'SUCCESS'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        return view('categories.show', compact('category'));
     }
 
     /**
@@ -117,13 +140,29 @@ class CategoriesController extends Controller
      * @param CategoryUpdateRequest $request
      * @param string $id
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function update(CategoryUpdateRequest $request, $id)
     {
-        return $category = $this->categoryService->update($request->all());
+        DB::beginTransaction();
+        try {
+            $category = $this->categoryService->update($request->all(), $id);
+            DB::commit();
+            return response()->json([
+                'data' => ['category' => $category],
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message' => trans('messages.category.update.success')
+            ], 200);
+        }catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
 
@@ -132,20 +171,25 @@ class CategoriesController extends Controller
      *
      * @param int $id
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
+        DB::beginTransaction();
+        try {
+            $this->repository->delete($id);
+            DB::commit();
             return response()->json([
-                'message' => 'Category deleted.',
-                'deleted' => $deleted,
-            ]);
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message' => trans('messages.category.delete.success')
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        return redirect()->back()->with('message', 'Category deleted.');
     }
 }
