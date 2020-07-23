@@ -9,7 +9,7 @@ use App\Repositories\CategoryRepository;
 use App\Repositories\EntityMediaRepository;
 use App\Repositories\MediaRepository;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 
@@ -65,24 +65,27 @@ class ArticlesController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(Request $request)
     {
-        if ($request->category_id !== null) {
-            $articles = $this->repository->with('medias')->findWhere(['category_id' => $request->category_id]);
-        } else {
-            $articles = $this->repository->with('medias')->all();
-        }
-
-        if (request()->wantsJson()) {
-
+        DB::beginTransaction();
+        try {
+            $categories = $this->repository->getListArticles($request->all());
+            DB::commit();
             return response()->json([
-                'data' => $articles,
-            ]);
+                'categories' => $categories,
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message' => ''
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        return view('articles.list', compact('articles'));
     }
 
     /**
@@ -96,21 +99,22 @@ class ArticlesController extends Controller
      */
     public function store(ArticleCreateRequest $request)
     {
+        DB::beginTransaction();
         try {
-            $request['created_at'] = time();
-            $request['updated_at'] = time();
-            $article = $this->repository->create($request->all());
-            $files = $request->file('files');
-            $medias = json_decode($request->get('medias'));
-            $this->repository->createMedias($files,$medias, $article->id);
+            $article = $this->repository->createArticle($request->all());
+            DB::commit();
             return response()->json([
-                'error' => false
-            ]);
+                'data' => $article,
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message' => 'created success.'
+            ], 200);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'error' => true,
                 'message' => $e->getMessage()
-            ]);
+            ], 500);
         }
     }
 
