@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::group(['middleware' => 'api'], static function () {
 
     Route::resource('categories', 'CategoriesController');
+    Route::resource('media', 'MediaController');
 
     Route::prefix('articles')->group(function () {
         Route::get('/', 'ArticlesController@index');
