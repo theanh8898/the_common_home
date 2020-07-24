@@ -13,7 +13,7 @@ class MediaCreateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class MediaCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'media_type' => 'required|in:0,1',
+            'use_type' => 'required|in:0,1',
+            'sort_order' => 'required|integer',
+            'file' => 'required|file',
         ];
     }
 }

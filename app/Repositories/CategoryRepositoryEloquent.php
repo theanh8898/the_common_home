@@ -37,7 +37,7 @@ class CategoryRepositoryEloquent extends BaseRepository implements CategoryRepos
     {
         $pageSize = $params['page_size'] ?? PAGE_SIZE;
         $keyword = $params['keyword'];
-        $categories = $this->orderBy('name');
+        $categories = $this->orderBy('name', 'ASC');
         if ($keyword !== null) {
             $categories->scopeQuery(function ($query) use ($keyword) {
                 return $query->where('name', 'like', '%' . $keyword . '%');

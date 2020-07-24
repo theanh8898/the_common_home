@@ -16,6 +16,7 @@ const CREATE_ARTICLE = 'createArticle';
 const STORE_ARTICLE = 'storeArticle';
 const DETAIL_ARTICLE = 'detailArticle';
 const DELETE_ARTICLE = 'deleteArticle';
+
 /**
  * Type of article
  */

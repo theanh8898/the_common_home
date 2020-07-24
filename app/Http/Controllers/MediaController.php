@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\MediaCreateRequest;
 use App\Http\Requests\MediaUpdateRequest;
 use App\Repositories\MediaRepository;
-use App\Validators\MediaValidator;
 
 /**
  * Class MediaController.
@@ -25,40 +25,40 @@ class MediaController extends Controller
     protected $repository;
 
     /**
-     * @var MediaValidator
-     */
-    protected $validator;
-
-    /**
      * MediaController constructor.
      *
      * @param MediaRepository $repository
-     * @param MediaValidator $validator
      */
-    public function __construct(MediaRepository $repository, MediaValidator $validator)
+    public function __construct(MediaRepository $repository)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $media = $this->repository->all();
-
-        if (request()->wantsJson()) {
-
+        DB::beginTransaction();
+        try {
+            $medias = $this->repository->getListMedia($request->all());
+            DB::commit();
             return response()->json([
-                'data' => $media,
-            ]);
+                'data' => $medias,
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message' => ''
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        return view('media.index', compact('media'));
     }
 
     /**
@@ -66,38 +66,28 @@ class MediaController extends Controller
      *
      * @param  MediaCreateRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function store(MediaCreateRequest $request)
     {
+        DB::beginTransaction();
         try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $medium = $this->repository->create($request->all());
-
-            $response = [
-                'message' => 'Media created.',
-                'data'    => $medium->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $media = $this->repository->createMedia($request->all());
+            DB::commit();
+            return response()->json([
+                'data' => $media,
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message'=>trans('messages.media.create.success')
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -142,40 +132,28 @@ class MediaController extends Controller
      * @param  MediaUpdateRequest $request
      * @param  string            $id
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function update(MediaUpdateRequest $request, $id)
     {
+        DB::beginTransaction();
         try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $medium = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'Media updated.',
-                'data'    => $medium->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $media = $this->repository->updateMedia($request->all(), $id);
+            DB::commit();
+            return response()->json([
+                'data' => $media,
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message'=>trans('messages.media.create.success')
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 

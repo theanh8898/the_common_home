@@ -47,9 +47,10 @@ class CategoriesController extends Controller
      */
     public function index(Request $request)
     {
-
+        DB::beginTransaction();
         try {
             $categories = $this->repository->getListCategories($request->all());
+            DB::commit();
             return response()->json([
                 'categories' => $categories,
                 'error' => false,
@@ -57,6 +58,7 @@ class CategoriesController extends Controller
                 'message' => ''
             ], 200);
         } catch (\Exception $e) {
+            DB::rollBack();
             response()->json([
                 'error' => true,
                 'message' => $e->getMessage()
