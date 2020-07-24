@@ -2,12 +2,11 @@
 
 namespace App\Repositories;
 
-use Illuminate\Support\Facades\Storage;
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\MediaRepository;
 use App\Entities\Media;
 use App\Validators\MediaValidator;
+use Illuminate\Support\Facades\Storage;
+use Prettus\Repository\Criteria\RequestCriteria;
+use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
  * Class MediaRepositoryEloquent.
@@ -84,9 +83,34 @@ class MediaRepositoryEloquent extends BaseRepository implements MediaRepository
      * @param $params
      * @param $id
      * @return mixed|void
+     * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function updateMedia($params, $id)
     {
-
+        $data = [];
+        if (isset($params['file'])) {
+            $file = $params['file'];
+            $mediaType = TYPES_OF_MEDIA[$params['media_type']];
+            $extension = $file->getClientOriginalExtension();
+            preg_match('/.([0-9]+) /', microtime(), $m);
+            $fileName = sprintf($mediaType . '%s%s.%s', date('YmdHis'), $m[1], $extension);
+            $storage = Storage::disk('public');
+            $checkDirectory = $storage->exists('file');
+            if (!$checkDirectory) {
+                $storage->makeDirectory('file');
+            }
+            $storage->put('file/' . $fileName, file_get_contents($file), 'public');
+            $data['name'] = $fileName;
+        }
+        if (isset($params['media_type'])) {
+            $data['media_type'] = $params['media_type'];
+        }
+        if (isset($params['use_type'])) {
+            $data['use_type'] = $params['use_type'];
+        }
+        if (isset($params['sort_order'])) {
+            $data['sort_order'] = $params['sort_order'];
+        }
+        return $this->update($data, $id);
     }
 }

@@ -22,4 +22,11 @@ interface ArticleRepository extends RepositoryInterface
      * @return mixed
      */
     public function createArticle($params);
+
+    /**
+     * @param $params
+     * @param $id
+     * @return mixed
+     */
+    public function updateArticle($params, $id);
 }

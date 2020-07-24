@@ -10,8 +10,6 @@ use App\Repositories\EntityMediaRepository;
 use App\Repositories\MediaRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 
 /**
  * Class ArticlesController.
@@ -71,10 +69,10 @@ class ArticlesController extends Controller
     {
         DB::beginTransaction();
         try {
-            $categories = $this->repository->getListArticles($request->all());
+            $articles = $this->repository->getListArticles($request->all());
             DB::commit();
             return response()->json([
-                'categories' => $categories,
+                'data' => $articles,
                 'error' => false,
                 'code' => 'SUCCESS',
                 'message' => ''
@@ -107,7 +105,7 @@ class ArticlesController extends Controller
                 'data' => $article,
                 'error' => false,
                 'code' => 'SUCCESS',
-                'message' => 'created success.'
+                'message' => trans('messages.article.create.success')
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -123,20 +121,27 @@ class ArticlesController extends Controller
      *
      * @param int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        $article = $this->repository->with('medias')->find($id);
-
-        if (request()->wantsJson()) {
-
+        DB::beginTransaction();
+        try {
+            $article = $this->repository->with('medias')->find($id);
+            DB::commit();
             return response()->json([
                 'data' => $article,
-            ]);
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message' => ''
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        return view('articles.show', compact('article'));
     }
 
     /**
@@ -159,40 +164,28 @@ class ArticlesController extends Controller
      * @param ArticleUpdateRequest $request
      * @param string $id
      *
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
     public function update(ArticleUpdateRequest $request, $id)
     {
+        DB::beginTransaction();
         try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $article = $this->repository->update($request->all(), $id);
-
-            $response = [
-                'message' => 'Article updated.',
-                'data' => $article->toArray(),
-            ];
-
-            if ($request->wantsJson()) {
-
-                return response()->json($response);
-            }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error' => true,
-                    'message' => $e->getMessageBag()
-                ]);
-            }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $article = $this->repository->updateArticle($request->all(), $id);
+            DB::commit();
+            return response()->json([
+                'data' => $article,
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message' => trans('messages.article.update.success')
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -202,21 +195,27 @@ class ArticlesController extends Controller
      *
      * @param int $id
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
-
-        if (request()->wantsJson()) {
-
+        DB::beginTransaction();
+        try {
+            $this->repository->delete($id);
+            $this->entityMediaRepository->deleteWhere(['entity_id' => $id]);
+            DB::commit();
             return response()->json([
-                'message' => 'Article deleted.',
-                'deleted' => $deleted,
-            ]);
+                'error' => false,
+                'code' => 'SUCCESS',
+                'message' => trans('messages.article.delete.success')
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
         }
-
-        return redirect()->back()->with('message', 'Article deleted.');
     }
 
     public function create()

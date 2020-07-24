@@ -82,4 +82,42 @@ class ArticleRepositoryEloquent extends BaseRepository implements ArticleReposit
         EntityMedia::insert($entityMedias);
         return $this->with('medias')->find($article->id);
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateArticle($params, $id)
+    {
+        if (isset($params['type'])) {
+            $data['type'] = $params['type'];
+        }
+        if (isset($params['name'])) {
+            $data['name'] = $params['name'];
+        }
+        if (isset($params['title'])) {
+            $data['title'] = $params['title'];
+        }
+        if (isset($params['meta_description'])) {
+            $data['meta_description'] = $params['meta_description'];
+        }
+        if (isset($params['content'])) {
+            $data['content'] = $params['content'];
+        }
+        if (isset($params['category_id'])) {
+            $data['category_id'] = $params['category_id'];
+        }
+        $data['updated_at'] = time();
+        $article = $this->update($data, $id);
+        if (isset($params['media_ids'])) {
+            EntityMedia::where('entity_id', $id)->delete();
+            $entityMedias = array_map(function ($media) use ($article) {
+                $entity['entity_type'] = array_search('article', TYPES_OF_ENTITY_MEDIA);
+                $entity['entity_id'] = $article->id;
+                $entity['media_id'] = $media;
+                return $entity;
+            }, $params['media_ids']);
+            EntityMedia::insert($entityMedias);
+        }
+        return $this->with('medias')->find($id);
+    }
 }
