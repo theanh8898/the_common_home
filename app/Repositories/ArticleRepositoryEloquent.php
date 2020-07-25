@@ -2,12 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Entities\EntityMedia;
-use App\Entities\Media;
-use Illuminate\Support\Facades\Storage;
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Criteria\RequestCriteria;
 use App\Entities\Article;
+use App\Entities\EntityMedia;
+use Prettus\Repository\Criteria\RequestCriteria;
+use Prettus\Repository\Eloquent\BaseRepository;
 
 /**
  * Class ArticleRepositoryEloquent.
@@ -27,47 +25,6 @@ class ArticleRepositoryEloquent extends BaseRepository implements ArticleReposit
     }
 
     /**
-     * @param $files
-     * @param $medias
-     * @param $articleId
-     * @return mixed|void
-     */
-    public function createMedias($files, $medias, $articleId)
-    {
-        $data = [];
-        if (count($files) > 0) {
-            $mediasCreated = [];
-            foreach ($medias as $index => $item) {
-                $extension = $files[$index]->getClientOriginalExtension();
-                preg_match('/.([0-9]+) /', microtime(), $m);
-                $fileName = sprintf('audio%s%s.%s', date('YmdHis'), $m[1], $extension);
-                $storage = Storage::disk('public');
-                $checkDirectory = $storage->exists('audio');
-                if (!$checkDirectory) {
-                    $storage->makeDirectory('file');
-                }
-                $storage->put('file/' . $fileName, file_get_contents($files[$index]), 'public');
-                $media['media_type'] = array_search($item->media_type, TYPES_OF_MEDIA);
-                $media['name'] = $fileName;
-                $media['use_type'] = array_search($item->use_type, USE_TYPE_OF_MEDIA);
-                $media['sort_order'] = $item->sort_order;
-                $media['created_at'] = time();
-                $media = Media::create($media);
-                array_push($mediasCreated, $media->id);
-            }
-            $entityMedias = [];
-            foreach ($mediasCreated as $item) {
-                $entity['entity_type'] = array_search('article', TYPES_OF_ENTITY_MEDIA);
-                $entity['entity_id'] = $articleId;
-                $entity['media_id'] = $item;
-                array_push($entityMedias, $entity);
-            }
-            EntityMedia::insert($entityMedias);
-        }
-    }
-
-
-    /**
      * Boot up the repository, pushing criteria
      */
     public function boot()
@@ -75,4 +32,92 @@ class ArticleRepositoryEloquent extends BaseRepository implements ArticleReposit
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
+    /**
+     * @param $params
+     * @return mixed|void
+     */
+    public function getListArticles($params)
+    {
+        $pageSize = $params['page_size'] ?? PAGE_SIZE;
+        $categories = $this->with('medias')->orderBy('created_at', 'DESC');
+        $category_id = $params['category_id'];
+        if ($category_id !== null) {
+            $categories->scopeQuery(function ($query) use ($category_id) {
+                return $query->where('category_id', $category_id);
+            });
+        }
+        $type = $params['type'];
+        if ($type !== null) {
+            $categories->scopeQuery(function ($query) use ($type) {
+                return $query->where('type', $type);
+            });
+        }
+        return $categories->paginate($pageSize);
+    }
+
+    /**
+     * @param $params
+     * @return mixed|void
+     * @throws \Prettus\Validator\Exceptions\ValidatorException
+     */
+    public function createArticle($params)
+    {
+        $data = [
+            'type' => $params['type'],
+            'name' => $params['name'],
+            'title' => $params['title'],
+            'meta_description' => $params['meta_description'],
+            'content' => $params['content'],
+            'category_id' => $params['category_id'],
+            'created_at' => time(),
+            'updated_at' => time()
+        ];
+        $article = $this->create($data);
+        $entityMedias = array_map(function ($media) use ($article) {
+            $entity['entity_type'] = array_search('article', TYPES_OF_ENTITY_MEDIA);
+            $entity['entity_id'] = $article->id;
+            $entity['media_id'] = $media;
+            return $entity;
+        }, $params['media_ids']);
+        EntityMedia::insert($entityMedias);
+        return $this->with('medias')->find($article->id);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function updateArticle($params, $id)
+    {
+        if (isset($params['type'])) {
+            $data['type'] = $params['type'];
+        }
+        if (isset($params['name'])) {
+            $data['name'] = $params['name'];
+        }
+        if (isset($params['title'])) {
+            $data['title'] = $params['title'];
+        }
+        if (isset($params['meta_description'])) {
+            $data['meta_description'] = $params['meta_description'];
+        }
+        if (isset($params['content'])) {
+            $data['content'] = $params['content'];
+        }
+        if (isset($params['category_id'])) {
+            $data['category_id'] = $params['category_id'];
+        }
+        $data['updated_at'] = time();
+        $article = $this->update($data, $id);
+        if (isset($params['media_ids'])) {
+            EntityMedia::where('entity_id', $id)->delete();
+            $entityMedias = array_map(function ($media) use ($article) {
+                $entity['entity_type'] = array_search('article', TYPES_OF_ENTITY_MEDIA);
+                $entity['entity_id'] = $article->id;
+                $entity['media_id'] = $media;
+                return $entity;
+            }, $params['media_ids']);
+            EntityMedia::insert($entityMedias);
+        }
+        return $this->with('medias')->find($id);
+    }
 }

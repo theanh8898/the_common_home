@@ -30,4 +30,8 @@ class Category extends Model implements Transformable
         'created_at'
     ];
 
+    public function articles()
+    {
+        return $this->hasMany(Article::class, 'category_id', 'id');
+    }
 }

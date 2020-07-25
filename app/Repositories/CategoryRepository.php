@@ -11,5 +11,9 @@ use Prettus\Repository\Contracts\RepositoryInterface;
  */
 interface CategoryRepository extends RepositoryInterface
 {
-    //
+    /**
+     * @param $params
+     * @return mixed
+     */
+    public function getListCategories($params);
 }

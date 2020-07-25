@@ -9,6 +9,13 @@ const STORE_CATEGORY = 'storeCategory';
 const LIST_CATEGORY = 'listCategory';
 const EDIT_CATEGORY = 'editCategory';
 const UPDATE_CATEGORY = 'updateCategory';
+const DELETE_CATEGORY = 'deleteCategory';
+const DETAIL_CATEGORY = 'detailCategory';
+const LIST_ARTICLE = 'listArticle';
+const CREATE_ARTICLE = 'createArticle';
+const STORE_ARTICLE = 'storeArticle';
+const DETAIL_ARTICLE = 'detailArticle';
+const DELETE_ARTICLE = 'deleteArticle';
 
 /**
  * Type of article
@@ -29,3 +36,9 @@ const USE_TYPE_OF_MEDIA = ['avatar', 'cover'];
  * Type of entity media
  */
 const TYPES_OF_ENTITY_MEDIA = ['article', 'home', 'room'];
+
+/**
+ * Define params get list
+ */
+const PAGE_SIZE = 10;
+

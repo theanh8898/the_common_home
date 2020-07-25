@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
@@ -33,5 +34,15 @@ class Article extends Model implements Transformable
         'created_at',
         'updated_at'
     ];
+
+    public function medias()
+    {
+        return $this->belongsToMany('App\Entities\Media', 'entity_media', 'entity_id', 'media_id')->withPivot('entity_type');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'id', 'category_id');
+    }
 
 }

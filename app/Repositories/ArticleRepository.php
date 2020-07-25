@@ -12,10 +12,21 @@ use Prettus\Repository\Contracts\RepositoryInterface;
 interface ArticleRepository extends RepositoryInterface
 {
     /**
-     * @param $files
-     * @param $medias
-     * @param $articleId
+     * @param $params
      * @return mixed
      */
-    public function createMedias($files, $medias, $articleId);
+    public function getListArticles($params);
+
+    /**
+     * @param $params
+     * @return mixed
+     */
+    public function createArticle($params);
+
+    /**
+     * @param $params
+     * @param $id
+     * @return mixed
+     */
+    public function updateArticle($params, $id);
 }

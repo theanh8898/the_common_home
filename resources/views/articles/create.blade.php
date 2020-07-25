@@ -6,7 +6,7 @@
             <h1 class="page-title">Create a new Article</h1>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route(HOME) }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('articles.index') }}">Articles</a></li>
+                <li class="breadcrumb-item"><a href="{{ route(LIST_ARTICLE) }}">Articles</a></li>
                 <li class="breadcrumb-item active">Create Article</li>
             </ol>
         </div>

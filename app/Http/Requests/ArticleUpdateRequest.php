@@ -13,7 +13,7 @@ class ArticleUpdateRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,8 @@ class ArticleUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'type' => 'in:0,1',
+            'name' => 'unique:categories,name',
         ];
     }
 }

@@ -8,39 +8,41 @@ use Illuminate\Support\Facades\DB;
 
 class CategoryService
 {
-    public function create($data) {
-        DB::beginTransaction();
-        try {
-            $category = Category::create([
-                'name' => $data['name'],
-                'title' => $data['title'],
-                'meta_description' => $data['meta_description'],
-                'created_at' => time(),
-            ]);
+    /**
+     * @var CategoryRepository
+     */
+    public $categoryRepository;
 
-            DB::commit();
-            return $category;
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-        }
+    public function __construct(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
     }
 
-    public function update($data) {
-        DB::beginTransaction();
-        try {
+    /**
+     * @param $data
+     * @return mixed
+     */
+    public function create($data)
+    {
+        return Category::create([
+            'name' => $data['name'],
+            'title' => $data['title'],
+            'meta_description' => $data['meta_description'],
+            'created_at' => time(),
+        ]);
+    }
 
-            $category = Category::where('id', $data['id'])->update([
-                'name' => $data['name'],
-                'title' => $data['title'],
-                'meta_description' => $data['meta_description'],
-            ]);
-
-            DB::commit();
-            return $category;
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-        }
+    /**
+     * @param $data
+     * @param $id
+     * @return mixed
+     */
+    public function update($data, $id)
+    {
+        return $this->categoryRepository->update([
+            'name' => $data['name'],
+            'title' => $data['title'],
+            'meta_description' => $data['meta_description'],
+        ], $id);
     }
 }

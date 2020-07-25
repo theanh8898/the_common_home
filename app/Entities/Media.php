@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
@@ -30,5 +31,18 @@ class Media extends Model implements Transformable
     ];
 
     public $timestamps = false;
+
+    public function articles()
+    {
+        return $this->belongsToMany('App\Entities\Article', 'entity_media', 'media_id', 'entity_id')->withPivot('entity_type');
+    }
+
+    public function getNameAttribute($value)
+    {
+        if ($value !== null) {
+            return asset(Storage::url('file/' . $value));
+        }
+        return $value;
+    }
 
 }

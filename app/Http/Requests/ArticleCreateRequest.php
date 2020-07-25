@@ -24,12 +24,13 @@ class ArticleCreateRequest extends FormRequest
     public function rules()
     {
         return [
-            'type' => 'required',
+            'type' => 'required|in:0,1',
             'name' => 'required|unique:categories,name',
             'title' => 'required',
             'content' => 'required',
             'meta_description' => 'required',
             'category_id' => 'required',
+            'media_ids' => 'required',
         ];
     }
 }

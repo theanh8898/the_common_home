@@ -1,9 +1,9 @@
 <template>
     <div class="row">
-        <b-table v-if="this.categoriesData.length > 0"
+        <b-table v-if="this.articlesData.length > 0"
                  id="category-table"
                  :bordered= "true"
-                 :items= "categoriesData"
+                 :items= "articlesData"
                  :per-page="perPage"
                  :current-page="currentPage"
                  :fields="fields"
@@ -12,8 +12,14 @@
             <template v-slot:cell(name)="data">
                 <span class="font-weight-bold word-break">{{ data.value }}</span>
             </template>
+            <template v-slot:cell(type)="data">
+                <span>{{ data.value === 0 ? "STORIES" : "NEWSLETTER" }}</span>
+            </template>
             <template v-slot:cell(action)="data">
                 <div class="text-center">
+                    <button @click="redirectEdit(data.item.id)" class="btn btn-icon btn-outline btn-info btn-round">
+                        <i class="icon fa-send" aria-hidden="true"></i>
+                    </button>
                     <button @click="redirectEdit(data.item.id)" class="btn btn-icon btn-outline btn-success btn-round">
                         <i class="icon fa-edit" aria-hidden="true"></i>
                     </button>
@@ -29,7 +35,7 @@
             </template>
         </b-table>
 
-        <b-pagination v-if="this.categoriesData.length > perPage"
+        <b-pagination v-if="this.articlesData.length > perPage"
                       id="paginate-category-table"
                       v-model="currentPage"
                       :total-rows="rows"
@@ -40,14 +46,14 @@
         ></b-pagination>
 
         <modal id="modal-confirm-import" ref="modalConfirmDelete">-->
-            <span slot="modal-title" class="font-weight-bold">Do you want delete this category??</span>
+            <span slot="modal-title" class="font-weight-bold">Do you want delete this article??</span>
 
             <div slot="modal-body">
             </div>
             <div slot="modal-footer">
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-info" @click="deleteCategory(idDel)">OK</button>
+                    <button type="button" class="btn btn-info" @click="deleteUser(idDel)">OK</button>
                 </div>
             </div>
         </modal>
@@ -59,31 +65,33 @@
     import modal from '../common/modal';
 
     export default {
-        name: "ListCategory",
+        name: "ListArticle",
         components: {
             BTable,
             BPagination,
             modal
         },
-        props: ['categoriesData'],
+        props: ['articlesData'],
         data() {
             return {
                 idDel: '',
                 perPage: 10,
                 currentPage: 1,
                 fields: [
-                    // {
-                    //     key: 'key',
-                    //     label: 'No.',
-                    //     thStyle: {
-                    //         width: '3rem'
-                    //     },
-                    // },
                     {
                         key: 'name',
                         label: 'Name',
                         thStyle: {
                             width: '10rem',
+                            textAlign: 'center',
+                            color: '#00e08d'
+                        },
+                    },
+                    {
+                        key: 'type',
+                        label: 'Type',
+                        thStyle: {
+                            width: '7rem',
                             textAlign: 'center',
                             color: '#00e08d'
                         },
@@ -120,18 +128,18 @@
         },
         methods: {
             redirectEdit(id) {
-                window.location.href = `/categories/edit/${id}`;
+                window.location.href = `/article/edit/${id}`;
             },
             showConfirmDelete(id) {
                 this.idDel = id;
                 this.$refs.modalConfirmDelete.open();
             },
-            deleteCategory(id) {
+            deleteUser(id) {
                 this.$refs.modalConfirmDelete.close();
 
-                axios.delete(`/categories/delete/${id}`)
+                axios.delete(`/articles/delete/${id}`)
                     .then((data) => {
-                        location.href = '/categories';
+                        location.href = '/articles';
                     }).catch((error) => {
                     console.log(error);
                 });
@@ -139,7 +147,7 @@
         },
         computed: {
             rows() {
-                return this.categoriesData.length
+                return this.articlesData.length
             }
         },
     }

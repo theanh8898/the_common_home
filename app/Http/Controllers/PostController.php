@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 
-class HomeController extends Controller
+class PostController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -23,8 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $article = new \stdClass();
-        $article->name = 'SDfdfdsfsdf';
-        return view('home', compact('article'));
+
+        return view('posts.show');
     }
 }
