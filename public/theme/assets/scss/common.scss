@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=Poiret+One&display=swap');
+
+/* Global */
+:root {
+  --theme-primary-color: #eaebec;
+  --theme-primary-color-2: #d2d7d9;
+  --theme-primary-color-3: #bdc2c5;
+}
+
+$bg-color-gray-light : #eaebec;
+$bg-color-gray : #d2d7d9;
+$bg-color-gray-dark : #eaebec;
+
+$link-color: #8d9295;
+
+/* Typography */
+@font-face {
+  font-family: "my-dutch";
+  src: url("../css/fonts/dutch.ttf");
+}
+
+@font-face {
+  font-family: "my-dutchb";
+  src: url("../css/fonts/dutchb.ttf");
+}
+
+@font-face {
+  font-family: "my-segoeui";
+  src: url("../css/fonts/segoeui.ttf");
+}
+
+@font-face {
+  font-family: "my-segoeuib";
+  src: url("../css/fonts/segoeuib.ttf");
+}
+
+@font-face {
+  font-family: "my-UTM-Avo";
+  src: url("../css/fonts/UTM Avo.ttf");
+}
+
+@font-face {
+  font-family: "my-UTM-AvoBold";
+  src: url("../css/fonts/UTM AvoBold.ttf");
+}
+
+@font-face {
+  font-family: "my-UTM-AvoItalic";
+  src: url("../css/fonts/UTM AvoItalic.ttf");
+}
+
+
+ h1,h2,h3,h4 {
+   margin: 0;
+ }
+h1 {
+  font-size: 34px;
+  line-height: 41px;
+}
+h2 {
+  font-size: 24px;
+  line-height: 28px;
+}
+h3 {
+  font-size: 18px;
+  line-height: 24px;
+}
+h4 {
+  font-size: 14px;
+  line-height: 22px;
+}
+.btn-large {
+
+}
+.small-text {
+  font-size: 11px;
+  line-height: 14px;
+}
+/* !Typography*/
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: "my-segoeui";
+  box-sizing: border-box;
+}
+
+a {
+  color: #222222;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #222222;
+}
+
+i {
+  font-size: 1em;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+
+.container-half {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.main-page, footer {
+  position: relative;
+  z-index: 2;
+}
+.pd-10 {
+  padding: 10px;
+}
+.pd-30 {
+  padding: 30px;
+}
+.wrapper {
+  position: relative;
+}
+
+.breadcrumb {
+  background: transparent;
+  text-transform: uppercase;
+  padding-left: 0;
+  padding-right: 0;
+  span {
+    padding: 0 10px;
+  }
+}
+
+
+/* Responsive */
+
+@media (min-width: 576px) {
+  .container-half {
+    max-width: 90%;
+  }
+}
+
+@media (min-width: 768px) {
+  .container-half {
+    max-width: 96%
+  }
+}
+
+@media (min-width: 992px) {
+  .container-half {
+    max-width: 960px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container-half {
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1300px) {
+  .container-half {
+    max-width: 1280px;
+  }
+}
+
+
+/* End Responsive */

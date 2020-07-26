@@ -22,4 +22,19 @@ return [
             'success' => 'Media deleted.',
         ],
     ],
+    'city' => [
+        'create' => [
+            'success' => 'City created.',
+        ]
+    ],
+    'home' => [
+        'create' => [
+            'success' => 'Home created.',
+        ]
+    ],
+    'room' => [
+        'create' => [
+            'success' => 'Room created.',
+        ]
+    ]
 ];
