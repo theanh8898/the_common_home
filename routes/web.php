@@ -16,10 +16,9 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-    Route::redirect('/', '/home');
+//    Route::redirect('/', '/home');
 
-    Route::get('/home', 'HomeController@index')->name(HOME);
-    Route::get('/post/{id}', 'PostController@index')->name('POST');
+    Route::get('/', 'HomeController@index')->name(HOME);
 
     Route::prefix('categories')->group(function () {
         Route::get('/create', 'CategoriesController@create')->name(CREATE_CATEGORY);

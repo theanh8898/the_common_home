@@ -18,5 +18,8 @@ Route::group(['middleware' => 'api'], static function () {
     Route::resource('categories', 'CategoriesController');
     Route::resource('media', 'MediaController');
     Route::resource('articles', 'ArticlesController');
+    Route::resource('cities', 'CitiesController');
+    Route::resource('homes', 'HomesController');
+    Route::resource('rooms', 'RoomsController');
 
 });

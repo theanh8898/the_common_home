@@ -1,69 +1,68 @@
-<nav class="site-navbar navbar navbar-default navbar-fixed-top navbar-mega" role="navigation">
-
-    <div class="navbar-header">
-        <div class="navbar-brand navbar-brand-center active" data-toggle="gridmenu" aria-expanded="true">
-            <a class="text-white text-decoration-none" href="{{ route(HOME) }}">
-                <img class="navbar-brand-logo" src="{{ asset('assets/media/logo.png') }}">
-                <span class="navbar-brand-text hidden-xs-down"> The Common Home</span>
-            </a>
-        </div>
-    </div>
-
-    <div class="navbar-container container-fluid">
-        <!-- Navbar Collapse -->
-        <div class="collapse navbar-collapse navbar-collapse-toolbar" id="site-navbar-collapse">
-            <!-- Navbar Toolbar -->
-            <ul class="nav navbar-toolbar">
-                <li class="nav-item hidden-float" id="toggleMenubar">
-                    <a class="nav-link" data-toggle="menubar" href="#" role="button">
-                        <i class="icon hamburger hamburger-arrow-left">
-                            <span class="sr-only">Toggle menubar</span>
-                            <span class="hamburger-bar"></span>
-                        </i>
-                    </a>
-                </li>
-            </ul>
-            <!-- End Navbar Toolbar -->
-
-            <!-- Navbar Toolbar Right -->
-            <ul class="nav navbar-toolbar navbar-right navbar-toolbar-right">
-{{--                <li class="nav-item dropdown">--}}
-{{--                    <a class="nav-link" data-toggle="dropdown" href="javascript:void(0)" data-animation="scale-up" aria-expanded="false" role="button">--}}
-{{--                        <span class="flag-icon flag-icon-us"></span>--}}
-{{--                    </a>--}}
-{{--                    <div class="dropdown-menu" role="menu">--}}
-{{--                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">--}}
-{{--                            <span class="flag-icon flag-icon-gb"></span> English</a>--}}
-{{--                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">--}}
-{{--                            <span class="flag-icon flag-icon-fr"></span> French</a>--}}
-{{--                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">--}}
-{{--                            <span class="flag-icon flag-icon-cn"></span> Chinese</a>--}}
-{{--                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">--}}
-{{--                            <span class="flag-icon flag-icon-de"></span> German</a>--}}
-{{--                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem">--}}
-{{--                            <span class="flag-icon flag-icon-nl"></span> Dutch</a>--}}
-{{--                    </div>--}}
-{{--                </li>--}}
-                <li class="nav-item dropdown">
-                    <a class="nav-link navbar-avatar" data-toggle="dropdown" href="#" aria-expanded="false" data-animation="scale-up" role="button">
-                <span class="avatar avatar-online">
-                  <img src="{{ asset('assets/media/profile.png') }}" alt="...">
-                  <i></i>
-                </span>
-                    </a>
-                    <div class="dropdown-menu" role="menu">
-                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon wb-user" aria-hidden="true"></i> Profile</a>
-                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon wb-payment" aria-hidden="true"></i> Billing</a>
-                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon wb-settings" aria-hidden="true"></i> Settings</a>
-                        <div class="dropdown-divider" role="presentation"></div>
-                        <a class="dropdown-item" href="javascript:void(0)" role="menuitem"><i class="icon wb-power" aria-hidden="true"></i> Logout</a>
+<header class="site-header">
+    <nav class="nav">
+        <div class="container-half">
+            <div class="wrapper">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class=btn-menu-bars>
+                        <span class="fa fa-bars"></span>
                     </div>
-                </li>
-
-            </ul>
-            <!-- End Navbar Toolbar Right -->
+                    <div class="logo">
+                        <a href="./index.html" title="home"><img src="{{ asset('theme/assets/images/TheCommonHomes.png') }}" alt="logo"/></a>
+                    </div>
+                    <ul class="nav-right">
+                        <li><a class="languages" href="javascript:void(0)"><i class="fa fa-globe"></i></a></li>
+                        <li><a class="phone" href="tel:0836861282"><i class="fa fa-volume-control-phone"></i><span>0818 216 800</span></a>
+                        </li>
+                    </ul>
+                    <div class="top-bar d-none">
+                        <a class="dropdown" href="javascript:void(0)"><i class="fa fa-ellipsis-v"></i></a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- End Navbar Collapse -->
-
+    </nav>
+    <div class="lef-bar-menu">
+        <div class="wrapper">
+            <uL class="main-menu">
+                <li class="menu-item">
+                    <a href="./index.html">Our Homes</a>
+                </li>
+                <li class="menu-item">
+                    <a href="./stories.html">Stories</a>
+                </li>
+                <li class="menu-item">
+                    <a href="./newsletter.html">Newsletter</a>
+                </li>
+                <li class="menu-item">
+                    <a href="./our-services.html">Our Services</a>
+                </li>
+                <li class="menu-item">
+                    <a href="./about.html">About Us</a>
+                </li>
+            </uL>
+            <div class="socials">
+                <h4 class="title">Follow us on</h4>
+                <ul class="social-list">
+                    <li class="social-item">
+                        <a href="">
+                            <i class="fa fa-facebook-square"></i>
+                            <span>Facebook</span>
+                        </a>
+                    </li>
+                    <li class="social-item">
+                        <a href="">
+                            <i class="fa fa-instagram"></i>
+                            <span>Instagram</span>
+                        </a>
+                    </li>
+                    <li class="social-item">
+                        <a href="">
+                            <i class="fa fa-youtube-play"></i>
+                            <span>Youtube</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-</nav>
+</header>
